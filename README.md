@@ -15,10 +15,13 @@ Order
 	vid1(10/3 done)/vid2（10/3 done)
 	guide(10/3 done)/reading(10/3 done)
 	HW0(10/4 done) 
-	lab1b
-	lab1
-	Disc 1
+	lab1b (10/4 done)
+	lab1 (10/4 done)
+	Disc 1 (10/4 done)
+	vid 1/25 (10/4 done)
+	reading 1.2 (10/4 done)
 	Proj 0
+	disc 2
 
 
 
