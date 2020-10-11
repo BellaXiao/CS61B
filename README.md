@@ -7,6 +7,7 @@ start: 2020/10/3
 
 ## Learning Memo
 reading-lecture视频-各种作业和项目，最好就是按照syllabus顺序来。有一点值得注意的，看视频之前建议提前读讲义，读完再看视频可以增进不少理解的。
+不要从reading里面点链接，有些会跳转到18年的内容。
 
 run java in sublime3 text: cmd+b (build system:java-bai)
 
@@ -20,16 +21,22 @@ Order
 	Disc 1 (10/4 done)
 	vid 1/25 (10/4 done)
 	reading 1.2 (10/4 done)
-	Proj 0
+	Proj 0 （10/8 - before "Drawing the Background"）
 	disc 2
 
 
 
+## run java class in cmd
+proj0 apple$ java -cp ./examples: StdDrawDemo
+-- (-cp means set classpath, the default value if current directory)
 
+## Note:
+每次修改java file 以后都要重新javac 编译得到新的class file, 才能得到新结果。
 
-
-
-
+## proj0 Note:
+test the main function - cmd line:
+	javac NBody.java
+	java NBody 100 1 ./data/planets.txt
 
 
 
