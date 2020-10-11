@@ -110,6 +110,15 @@ public class Body {
 		this.yyPos += dt * this.yyVel; 
 	}
 
+
+	/** Thie method draw the body itself at its appropriate position.*/
+	public void draw(){
+		StdDraw.enableDoubleBuffering();
+
+		String imageToDraw = "images/"+this.imgFileName;
+		StdDraw.picture(this.xxPos, this.yyPos, imageToDraw);
+		StdDraw.show();
+	}
 }
 
 

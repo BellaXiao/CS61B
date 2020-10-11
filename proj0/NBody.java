@@ -38,14 +38,49 @@ public class NBody{
 		Body[] bodies = readBodies(filename);
 		double radius = readRadius(filename); 
 
-		/*Drawing the background*/
-		StdDraw.enableDoubleBuffering();
-		StdDraw.setScale(-radius, radius);
-		StdDraw.clear();
+		
+		/* Using two loops to update with time to show animation*/
+		/*Create a time variable to loop until T*/
+		for(double t=0.0; t<=T; t=t+dt){
+			
+			/*Calculate net x_force and y_force for each body in the array.*/
+			double[] xForces = new double[bodies.length];
+			double[] yForces = new double[bodies.length];
+			for(int i=0; i<bodies.length; i++){
+				Body b = bodies[i];
+				xForces[i] = b.calcNetForceExertedByX(bodies);
+				yForces[i] = b.calcNetForceExertedByY(bodies);
+			}
+			/*Update the body paras after all net X/Y_forces are calculated.*/
+			for(int i=0; i<bodies.length; i++){
+				Body b = bodies[i];
+				b.update(dt, xForces[i], yForces[i]);
+			}
 
-		String imageToDraw = "images/starfield.jpg";
-		StdDraw.picture(0, 0, imageToDraw);
-		StdDraw.show();
+			/*Drawing the background*/
+			StdDraw.enableDoubleBuffering();
+			StdDraw.setScale(-radius, radius);
+			StdDraw.clear();
+
+			String imageToDraw = "images/starfield.jpg";
+			StdDraw.picture(0, 0, imageToDraw);
+			/*Drawing all the bodys.*/
+			for(Body b : bodies){
+				b.draw();
+			}
+			StdDraw.show();
+			StdDraw.pause(20);
+
+		}
+		StdOut.printf("%d\n", bodies.length);
+		StdOut.printf("%.2e\n", radius);
+		for (int i = 0; i < bodies.length; i++) {
+		    StdOut.printf("%11.4e %11.4e %11.4e %11.4e %11.4e %12s\n",
+		                  bodies[i].xxPos, bodies[i].yyPos, bodies[i].xxVel,
+		                  bodies[i].yyVel, bodies[i].mass, bodies[i].imgFileName);   
+		}
+		
+
 
 
 	}
