@@ -3,7 +3,7 @@ import java.lang.Math; // import the math package to do the math calculation.
 
 
 
-public class Body {
+public class Planet {
 	public double xxPos;
 	public double yyPos;
 	public double xxVel;
@@ -13,7 +13,7 @@ public class Body {
 
 
 	/** Two Constructors for Body class. */
-	public Body(double xP, double yP, double xV,
+	public Planet(double xP, double yP, double xV,
               double yV, double m, String img){
 		xxPos = xP;
 		yyPos = yP;
@@ -23,7 +23,7 @@ public class Body {
 		imgFileName = img;
 	}
 
-	public Body(Body b) {
+	public Planet(Body b) {
 		xxPos = b.xxPos;
 		yyPos = b.yyPos;
 		xxVel = b.xxVel;
