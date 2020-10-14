@@ -6,7 +6,7 @@ start: 2020/10/3
 
 
 ## Learning Memo
-reading-lecture视频-各种作业和项目，最好就是按照syllabus顺序来。有一点值得注意的，看视频之前建议提前读讲义，读完再看视频可以增进不少理解的。
+lecture视频-reading -各种作业和项目.
 不要从reading里面点链接，有些会跳转到18年的内容。
 
 run java in sublime3 text: cmd+b (build system:java-bai)
@@ -22,6 +22,13 @@ Order
 	vid 1/25 (10/4 done)
 	reading 1.2 (10/4 done)
 	Proj 0 （10/8 - before "Drawing the Background"）
+			（10/11 done）
+	vid 1/28
+	R2.1
+	lab setup
+	lab2
+	vid 1/30
+	R2.2
 	disc 2
 
 
