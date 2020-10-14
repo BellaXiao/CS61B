@@ -1,6 +1,6 @@
 # CS61B
-2019 Spring
-https://sp19.datastructur.es/
+2018 Spring
+https://sp18.datastructur.es/
 
 start: 2020/10/3
 
@@ -13,6 +13,7 @@ run java in sublime3 text: cmd+b (build system:java-bai)
 
 
 Order
+version -- 19sp
 	vid1(10/3 done)/vid2（10/3 done)
 	guide(10/3 done)/reading(10/3 done)
 	HW0(10/4 done) 
@@ -23,6 +24,10 @@ Order
 	reading 1.2 (10/4 done)
 	Proj 0 （10/8 - before "Drawing the Background"）
 			（10/11 done）
+	
+
+-------------------------
+version -- change to 18sp
 	vid 1/28
 	R2.1
 	lab setup
@@ -30,6 +35,13 @@ Order
 	vid 1/30
 	R2.2
 	disc 2
+
+
+
+
+
+
+
 
 
 
