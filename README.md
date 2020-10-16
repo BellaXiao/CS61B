@@ -27,12 +27,14 @@ version -- 19sp
 	
 
 -------------------------
-version -- change to 18sp
-	vid 1/28
-	R2.1
-	lab setup
+version -- change to 18sp(https://sp18.datastructur.es/)
+also tracker in Notion app.
+
+	vid 1/22 （10/14 done）
+	R2.1 (10/15 done)
+	lab2 setup
 	lab2
-	vid 1/30
+	vid 1/24
 	R2.2
 	disc 2
 
@@ -137,6 +139,6 @@ To solve this:
 	then press enter
 
 
-
-
+https://bitmingw.com/2018/08/19/git-submodule-tutorial/
+-- git add submodule
 
