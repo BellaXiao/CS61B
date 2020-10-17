@@ -6,15 +6,29 @@ public class DebugExercise2 {
     /** Returns the max of a and b. Do not step into this function. 
       * This function may have a bug, but if it does, you should find it
       * by stepping over, not into. */
-    public static int max(int a, int b) {
+    /** public static int max(int a, int b) {
         int w = (b - a) >> 31;
-        /* If you're stepping into this function, click the
-           step out button because you're not going to learn anything. */
+        // If you're stepping into this function, click the
+        // step out button because you're not going to learn anything.
         int z = ~(b - a) >> 31;
 
         int max = b & w | a & z;
         return max;
+
+
+    }*/
+
+    //Self: rewrite the above max function to return the larger one instead of the smaller one
+    public static int max(int a, int b) {
+        if(a>=b){
+            return a;
+        }
+        else{
+            return b;
+        }
     }
+
+
 
 
     /** Returns the sum of a and b. Do not step into this function. 
@@ -22,8 +36,8 @@ public class DebugExercise2 {
       * by stepping over, not into. */    
     public static int add(int a, int b) {
         int x = a, y = b;
-        /* If you're stepping into this function, click the
-           step out button because you're not going to learn anything. */
+        // If you're stepping into this function, click the
+        //   step out button because you're not going to learn anything.
         int xor, and, temp;
         and = x & y;
         xor = x ^ y;
@@ -36,6 +50,11 @@ public class DebugExercise2 {
         }
         return xor;
     }
+
+    // Self: add functions is wrong, rewrite it
+    /*public static int add(int a, int b){
+        return a+b;
+    }*/
 
     /** Returns a new array where entry i is the max of
      * a[i] and b[i]. For example, if a = {1, -10, 3}
@@ -55,12 +74,24 @@ public class DebugExercise2 {
         return returnArray;
     }
 
+    // self: debug the arrayMax function, max function is wrong,
+    // need to rewrite it. The original one returns the min.
+
+
+
+
+
+
+
+
+
     /** Returns the sum of all elements in x. */
     public static int arraySum(int[] x) {
         int i = 0;
         int sum = 0;
         while (i < x.length) {
-            sum = sum + add(sum, x[i]);
+            // original bug: sum = sum + add(sum, x[i]);
+            sum = add(sum, x[i]);
             i = i + 1;
         }
         return sum;
