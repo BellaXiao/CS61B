@@ -26,10 +26,15 @@ public class ArrayDeque<T> {
     /** Resizes the underlying array to the target capacity. */
     private void resize(int capacity) {
         T[] a = (T[]) new Object[capacity];
-        System.arraycopy(items, startPos, a, 0, items.length - startPos);
-        if (startPos > 0){
-            System.arraycopy(items, 0, a, items.length - startPos, startPos);
+        // should consider not only size increase but also size decrease
+        if (startPos + size > items.length) {
+            System.arraycopy(items, startPos, a, 0, items.length - startPos);
+            System.arraycopy(items, 0, a, items.length - startPos, startPos + size - items.length);
         }
+        else {
+            System.arraycopy(items, startPos, a, 0, size);
+        }
+
         items = a;
         startPos = 0;
     }
