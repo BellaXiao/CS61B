@@ -102,7 +102,7 @@ public class ArrayDeque<T> {
         T removeItem = items[startPos];
         startPos = (startPos + 1) % items.length;
         if (items.length >= 16 && size / items.length < 0.25) {
-            resize(size * 4);
+            resize(size * 2);
         }
         return removeItem;
     }
