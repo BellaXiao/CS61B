@@ -85,12 +85,14 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
         }
         @Override
         public boolean hasNext() {
-            return ((ptr + 1) % capacity != last);
+            return (ptr != last);
         }
 
         @Override
         public Object next() {
-            return rb[(ptr + 1) % capacity];
+            Object res = rb[ptr];
+            ptr = (ptr + 1) % capacity;
+            return res;
         }
     }
 

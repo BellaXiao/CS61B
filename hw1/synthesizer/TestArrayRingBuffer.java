@@ -16,10 +16,16 @@ public class TestArrayRingBuffer {
         arb.enqueue(3);
         arb.enqueue(4);
         assertTrue(arb.isFull());
-        assertEquals((int) arb.dequeue(), 1);
+        assertEquals(1, (int) arb.dequeue());
         assertFalse(arb.isFull());
-        assertEquals(arb.fillCount, 3);
-        assertEquals((int) arb.peek(), 2);
+        assertEquals(3, arb.fillCount);
+        assertEquals(2, (int) arb.peek());
+        // Test Iterator
+        Integer sum = 0;
+        for (Integer x: arb) {
+            sum += x;
+        }
+        assertEquals((Integer) 9, sum);
 
 
     }
