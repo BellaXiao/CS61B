@@ -15,15 +15,16 @@ public class Game {
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
 
-    public static long SEED = 2873123;
-    public static Random RANDOM = new Random(SEED);
+    //public static long SEED = 2873123;
+    //public static Random RANDOM = new Random(SEED);
 
     public static final int minWidth = 3;
     public static final int minHeight = 3;
     public  static  final int maxNRect = 100;
 
-    // adding a set in the class contains all the existed rects in this world.
-    public static Set <Rectangular> rectSet = new HashSet<>();
+    // adding a list in the class contains all the existed rects in this world.
+    // can'y use set, otherwise the world will be different even with same SEED, because of no order in set.
+    public static List <Rectangular> rectSet = new LinkedList<>();
 
 
     /**
@@ -223,7 +224,7 @@ public class Game {
      * ToDo: connect adjacent rects
      * first need to make sure rects isAdjacent, and then replace the tile within the adjacent range.
      */
-    public static void addConnection (TETile[][] world, Rectangular existR, Rectangular r, TETile t) {
+    public static void addConnection (TETile[][] world, Rectangular existR, Rectangular r, TETile t, Random RANDOM) {
         if (!Rectangular.isAdjacent(existR, r)) {
             System.out.println("Can only add connection to adjacent rectangulars.");
             return;
@@ -256,7 +257,7 @@ public class Game {
             Position leftdown = new Position(leftX + 1, existR.leftUp.y);
             connectR = new Rectangular(leftdown, replaceWid, 2, t);
         }
-        addOneRect(world, connectR);
+        addOneRect(world, connectR, RANDOM);
 
     }
 
@@ -294,7 +295,7 @@ public class Game {
      * @param rect: the rectangular to draw
      */
 
-    public static void addOneRect(TETile[][] world, Rectangular rect) {
+    public static void addOneRect(TETile[][] world, Rectangular rect, Random RANDOM) {
         // handle exceptions
         /* No need for this, since all these are handled within Rectangular constructor.
         if (rect.leftDown==null || rect.leftDown.x < 0 || rect.leftDown.y < 0 || rect.width <= 0 || rect.height <= 0) {
@@ -335,7 +336,7 @@ public class Game {
      * @param t_out: using TETile t_out as outside edge
      * @param t_in: using TETile t_in as inside
      */
-    public static void addNRect(TETile[][] world, int N, TETile t_out, TETile t_in) {
+    public static void addNRect(TETile[][] world, int N, TETile t_out, TETile t_in, Random RANDOM) {
         int count = 0;
         // if don't do this, The N could be too large that we can't have that many non-overlap rects in the whole world,
         // and goes into infinite loop. Theoretically, the max count can be WIDTH / 3 * HEIGHT / 3, but it's too slow and too much is meanless,
@@ -358,16 +359,19 @@ public class Game {
             // otherwise it takes too much time to have a non-overlap rect accepted.
             int width = RANDOM.nextInt(WIDTH/5);
             int height = RANDOM.nextInt(HEIGHT/5);
+
+            System.out.format("x:%d, y: %d, width: %d, height: %d\n", x,y,width,height);
+
             Position p = new Position(x, y);
             Rectangular r = new Rectangular(p, width, height, t_out, t_in);
             // only add r that doesn't overlap with all the existed rectangulars in this world rectSet.
             if (rectSet.isEmpty()) {
-                addOneRect(world, r);
+                addOneRect(world, r, RANDOM);
                 count += 1;
             } else if (isAdjacentSet(r) != null && !isOverlapSet(r)) {
                 Rectangular existR = isAdjacentSet(r);
-                addOneRect(world, r);
-                addConnection(world, existR, r, t_in);
+                addOneRect(world, r, RANDOM);
+                addConnection(world, existR, r, t_in, RANDOM);
                 count += 1;
             }
         }
@@ -425,15 +429,15 @@ public class Game {
             seed += inputChar[i];
             i += 1;
         }
-        SEED = Long.parseLong(seed);
-        RANDOM = new Random(SEED);
+        long SEED = Long.parseLong(seed);
+        Random RANDOM = new Random(SEED);
 
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
 
         // Test: initialize the world with tileset.nothing
         TETile[][] finalWorldFrame = nothingWorld(WIDTH, HEIGHT);
-        addNRect(finalWorldFrame, 100, Tileset.WALL, Tileset.FLOOR);
+        addNRect(finalWorldFrame, 50, Tileset.WALL, Tileset.FLOOR, RANDOM);
         //Your game should NOT render any tiles or play any sound when played with playWithInputString().
         //ter.renderFrame(finalWorldFrame);
 
