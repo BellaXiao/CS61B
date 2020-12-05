@@ -109,7 +109,7 @@ public class Percolation {
     public boolean percolates() {
         // need to deal with corner case N=1
         if (this.N == 1) {
-            return opened.contains(xyTo1D(0,0));
+            return opened.contains(xyTo1D(0, 0));
         }
 
         // use grid to see whether percolates
@@ -117,7 +117,7 @@ public class Percolation {
     }
 
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         // unit Test
         Percolation gg = new Percolation(1);
         //gg.open(0, 0);
@@ -139,7 +139,7 @@ public class Percolation {
         System.out.println(gg.percolates());
 
     }  // use for unit testing (not required)
-    */
+
 
 
 }
