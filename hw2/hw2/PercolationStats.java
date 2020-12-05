@@ -2,7 +2,7 @@ package hw2;
 
 import edu.princeton.cs.introcs.StdRandom;
 import edu.princeton.cs.introcs.StdStats;
-import edu.princeton.cs.introcs.Stopwatch;
+//import edu.princeton.cs.introcs.Stopwatch;
 
 public class PercolationStats {
     private int T;
@@ -34,17 +34,17 @@ public class PercolationStats {
             double x = (double) grid.numberOfOpenSites() / (this.N * this.N);
             xSamplesArray[i] = x;
         }
+        mean = StdStats.mean(xSamplesArray);
+        std = StdStats.stddev(xSamplesArray);
     }
 
     // sample mean of percolation threshold
     public double mean() {
-        mean = StdStats.mean(xSamplesArray);
         return mean;
     }
 
     // sample standard deviation of percolation threshold
     public double stddev() {
-        std = StdStats.stddev(xSamplesArray);
         return std;
     }
 
@@ -72,18 +72,19 @@ public class PercolationStats {
         while (i > 0) {
             Stopwatch watch = new Stopwatch();
             PercolationStats stats = new PercolationStats(N, T, pf);
-            System.out.format("Mean:%f, Std:%f\n", stats.mean(), stats.stddev());
-            time = watch.elapsedTime();
-            System.out.format("N:%d, T:%d, Time:%f\n", N, T, time);
+            //System.out.format("Mean:%f, Std:%f\n", stats.mean(), stats.stddev());
+            //time = watch.elapsedTime();
+            //System.out.format("N:%d, T:%d, Time:%f\n", N, T, time);
             for (double x: stats.xSamplesArray) {
                 System.out.println(x);
             }
-
+            System.out.format("%f, %f, %f, %f", stats.confidenceLow(),
+                    stats.stddev(), stats.confidenceHigh(), stats.confidenceLow());
             i -= 1;
             T *= 2;
         }
 
-    }
-    */
+    }*/
+
 
 }
