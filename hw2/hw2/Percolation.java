@@ -107,14 +107,20 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
+        // need to deal with corner case N=1
+        if (this.N == 1) {
+            return opened.contains(xyTo1D(0,0));
+        }
+
         // use grid to see whether percolates
         return grid.connected(virtualTop, virtualBottom);
     }
 
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         // unit Test
-        Percolation gg = new Percolation(5);
+        Percolation gg = new Percolation(1);
+        //gg.open(0, 0);
         gg.open(2, 3);
         gg.open(2, 1);
         gg.open(1, 1);
@@ -128,12 +134,12 @@ public class Percolation {
         gg.open(3, 2);
 
         System.out.println(gg.numberOfOpenSites());
-        System.out.println(gg.isFull(1, 1));
-        System.out.println(gg.isFull(2, 3));
+        //System.out.println(gg.isFull(1, 1));
+        //System.out.println(gg.isFull(2, 3));
         System.out.println(gg.percolates());
 
-
-
-
     }  // use for unit testing (not required)
+    */
+
+
 }

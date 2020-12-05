@@ -30,7 +30,8 @@ public class PercolationStats {
                 int col = StdRandom.uniform(this.N);
                 grid.open(row, col);
             }
-            double x = grid.numberOfOpenSites() / (this.N * this.N);
+            // need to cast to double, otherwise always 0.0
+            double x = (double) grid.numberOfOpenSites() / (this.N * this.N);
             xSamplesArray[i] = x;
         }
     }
@@ -60,24 +61,29 @@ public class PercolationStats {
     Using Stopwatch to test speed of Percolation using WeightedQuickUnionUF for large N and T
     with Percolation using QuickFindUF
      */
-    public static void main(String[] args) {
-        int N = 10;
-        int T = 5000;
+    /*public static void main(String[] args) {
+        int N = 20;
+        int T = 10;
         double time;
         PercolationFactory pf = new PercolationFactory();
 
         System.out.println("QFUF:");
-        int i = 10;
+        int i = 1;
         while (i > 0) {
             Stopwatch watch = new Stopwatch();
             PercolationStats stats = new PercolationStats(N, T, pf);
+            System.out.format("Mean:%f, Std:%f\n", stats.mean(), stats.stddev());
             time = watch.elapsedTime();
             System.out.format("N:%d, T:%d, Time:%f\n", N, T, time);
+            for (double x: stats.xSamplesArray) {
+                System.out.println(x);
+            }
+
             i -= 1;
             T *= 2;
         }
 
     }
-
+    */
 
 }
