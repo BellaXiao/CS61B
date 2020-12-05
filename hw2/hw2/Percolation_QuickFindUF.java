@@ -1,31 +1,31 @@
 package hw2;
 
-import edu.princeton.cs.algs4.WeightedQuickUnionUF;
+import edu.princeton.cs.algs4.QuickFindUF;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
-public class Percolation {
+public class Percolation_QuickFindUF {
     // create N-by-N grid, with all sites initially blocked
     /* this disjoint set is used for judging whether percolates
         contains both virtual top and virtual bottom.
      */
-    private WeightedQuickUnionUF grid;
+    private QuickFindUF grid;
     /* this disjoint set is used for judging whether one cell is full.
         contains only virtual top, excluding virtual bottom to avoid backwash problem.
      */
-    private WeightedQuickUnionUF noBackWashGrid;
+    private QuickFindUF noBackWashGrid;
     private int N;
     private int virtualTop;
     private int virtualBottom;
-    private Set<Integer> opened; // store all the pos that have been opened
+    private Set <Integer> opened; // store all the pos that have been opened
 
-    public Percolation(int N) {
+    public Percolation_QuickFindUF (int N) {
         if (N <= 0) {
             throw new IllegalArgumentException("N needs to be greater than 0!");
         }
-        grid = new WeightedQuickUnionUF(N * N + 2);
-        noBackWashGrid = new WeightedQuickUnionUF(N * N + 1);
+        grid = new QuickFindUF(N * N + 2);
+        noBackWashGrid = new QuickFindUF(N * N + 1);
         // add virtual top and virtual bottom
         virtualTop = N * N;
         virtualBottom = N * N + 1;
@@ -38,22 +38,22 @@ public class Percolation {
             grid.union(xyTo1D(0, i), virtualTop);
             noBackWashGrid.union(xyTo1D(0, i), virtualTop);
             // last row connected to virtual bottom for only grid
-            grid.union(xyTo1D(N - 1, i), virtualBottom);
+            grid.union(xyTo1D(N-1, i), virtualBottom);
         }
     }
 
     // convert 2d row and col to 1d index
-    private int xyTo1D(int row, int col) {
+    private int xyTo1D (int row, int col) {
         // make sure it is within the grid.
-        row = Math.min(N - 1, row);
+        row = Math.min(N-1, row);
         row = Math.max(0, row);
-        col = Math.min(N - 1, col);
+        col = Math.min(N-1, col);
         col = Math.max(0, col);
         return N * row + col;
     }
 
     // if adjacent p2 is in opened set, connect p1 with p2
-    private void adjOpenThenConnect(int p1, int p2) {
+    private void adjOpenThenConnect (int p1, int p2) {
         if (opened.contains(p2)) {
             grid.union(p1, p2);
             noBackWashGrid.union(p1, p2);
@@ -97,7 +97,7 @@ public class Percolation {
     public boolean isFull(int row, int col) {
         validRowCol(row, col);
         // use noBackWashGrid to avoid backwash problem
-        return isOpen(row, col) && noBackWashGrid.connected(xyTo1D(row, col), virtualTop);
+        return noBackWashGrid.connected(xyTo1D(row, col), virtualTop);
     }
 
     // number of open sites
@@ -114,22 +114,22 @@ public class Percolation {
 
     public static void main(String[] args) {
         // unit Test
-        Percolation gg = new Percolation(5);
+        Percolation_QuickFindUF gg = new Percolation_QuickFindUF(5);
         gg.open(2, 3);
         gg.open(2, 1);
         gg.open(1, 1);
-        gg.open(0, 1);
-        gg.open(3, 1);
-        gg.open(4, 1);
+        gg.open(0,1);
+        gg.open(3,1);
+        gg.open(4,1);
 
-        gg.open(4, 3);
-        gg.open(3, 3);
+        gg.open(4,3);
+        gg.open(3,3);
 
-        gg.open(3, 2);
+        gg.open(3,2);
 
         System.out.println(gg.numberOfOpenSites());
-        System.out.println(gg.isFull(1, 1));
-        System.out.println(gg.isFull(2, 3));
+        System.out.println(gg.isFull(1,1));
+        System.out.println(gg.isFull(2,3));
         System.out.println(gg.percolates());
 
 
