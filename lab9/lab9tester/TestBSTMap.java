@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import lab9.BSTMap;
 
+import java.util.Set;
+
 /**
  * Tests by Brendan Hu, Spring 2015, revised for 2018 by Josh Hug
  */
@@ -53,7 +55,7 @@ public class TestBSTMap {
     // assumes put works
     @Test
     public void sanityGetTest() {
-        BSTMap<String, Integer> b = new BSTMap<String, Integer>();
+        BSTMap<String, Integer> b = new BSTMap<>();
         assertEquals(null, b.get("starChild"));
         assertEquals(0, b.size());
         b.put("starChild", 5);
@@ -85,6 +87,37 @@ public class TestBSTMap {
         assertTrue(b.containsKey("hi"));
         assertTrue(b.get("hi") != null);
     }
+
+
+    // check whether deleteMin() works
+    @Test
+    public void sanityDeleteMinTest() {
+        BSTMap<Integer, Integer> b = new BSTMap<>();
+        b.put(7,1);
+        b.put(9,1);
+        b.put(5,1);
+        b.put(6,1);
+        b.deleteMin();
+        assertTrue(b.size() == 3);
+        assertTrue(b.get(6) == 1);
+    }
+
+    // check whether remove(K key, Node p) works
+    @Test
+    public void sanityRemoveWithNodeTest() {
+        BSTMap<Integer, Integer> b = new BSTMap<>();
+        b.put(7,1);
+        b.put(9,1);
+        b.put(5,1);
+        b.put(6,1);
+        b.remove(7);
+        assertTrue(b.size() == 3);
+        assertTrue(b.get(6) == 1);
+        assertEquals((Integer) 5, b.min());
+    }
+
+
+
 
     public static void main(String[] args) {
         jh61b.junit.TestRunner.runTests(TestBSTMap.class);
