@@ -19,6 +19,24 @@ public class ComplexOomage implements Oomage {
         return total;
     }
 
+
+//    public static void powerOf256(String[] args) {
+//        //jh61b.junit.textui.runClasses(TestComplexOomage.class);
+//        ArrayList<Integer> params = new ArrayList<>(6);
+//        params.add(1);
+//        for (int j = 0; j < 4; j += 1) {
+//            //params.add(StdRandom.uniform(0, 255));
+//            params.add(0);
+//        }
+//        int total = 0;
+//        for (int x : params) {
+//            total = total * 256;
+//            total = total + x;
+//        }
+//        System.out.println(params);
+//        System.out.println(total);
+//    }
+
     @Override
     public boolean equals(Object o) {
         if (o.getClass() != this.getClass()) {
