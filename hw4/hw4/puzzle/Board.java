@@ -3,8 +3,8 @@ package hw4.puzzle;
 import java.util.ArrayList;
 
 public class Board implements WorldState {
-    int[][] boardArray;
-    int N;
+    private int[][] boardArray;
+    private int N;
 
     public Board(int[][] tiles) {
         N = tiles.length;
@@ -123,7 +123,7 @@ public class Board implements WorldState {
         return manhattan();
     }
     public boolean equals(Object y) {
-        if (this.getClass() != y.getClass()) {
+        if (y == null || this.getClass() != y.getClass()) {
             return false;
         }
         Board other = (Board) y;
@@ -140,12 +140,24 @@ public class Board implements WorldState {
         return true;
     }
 
+    @Override
+    public int hashCode() {
+        int sum = 0;
+        for (int i = 0; i < N; i += 1) {
+            for (int j = 0; j < N; j += 1) {
+                sum += boardArray[i][j];
+            }
+        }
+        return sum;
+    }
+
+
 
     /** Returns the string representation of the board. 
       * Uncomment this method. */
     public String toString() {
         StringBuilder s = new StringBuilder();
-        int N = size();
+        //int N = size();
         s.append(N + "\n");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
