@@ -35,7 +35,13 @@ public class MergeSort {
     private static <Item extends Comparable> Queue<Queue<Item>>
             makeSingleItemQueues(Queue<Item> items) {
         // Your code here!
-        return null;
+        Queue<Queue<Item>> singleItems = new Queue<>();
+        for (Item q: items) {
+            Queue<Item> singleQ = new Queue<>();
+            singleQ.enqueue(q);
+            singleItems.enqueue(singleQ);
+        }
+        return singleItems;
     }
 
     /**
@@ -54,13 +60,49 @@ public class MergeSort {
     private static <Item extends Comparable> Queue<Item> mergeSortedQueues(
             Queue<Item> q1, Queue<Item> q2) {
         // Your code here!
-        return null;
+        Queue<Item> sortedOne = new Queue<>();
+        while (!q1.isEmpty() || !q2.isEmpty()) {
+            Item mini = getMin(q1, q2);
+            sortedOne.enqueue(mini);
+        }
+        return sortedOne;
     }
 
     /** Returns a Queue that contains the given items sorted from least to greatest. */
     public static <Item extends Comparable> Queue<Item> mergeSort(
             Queue<Item> items) {
         // Your code here!
-        return items;
+        if (items == null || items.size() == 1) {
+            return items;
+        }
+        Queue<Item> sortedItems = new Queue<>();
+        Queue<Queue<Item>> singleQ;
+        singleQ = makeSingleItemQueues(items);
+        sortedItems.enqueue(singleQ.peek().dequeue());
+        singleQ.dequeue();
+        for (Queue<Item> q: singleQ) {
+            sortedItems = mergeSortedQueues(sortedItems, q);
+        }
+
+        return sortedItems;
     }
+
+
+    // Lightweight test in main
+    public static void main(String[] args) {
+        Queue<String> students = new Queue<>();
+        students.enqueue("Alice");
+        students.enqueue("Vanessa");
+        students.enqueue("Ethan");
+        students.enqueue("Vbnessa");
+        students.enqueue("Ethan");
+        System.out.println(students);
+        System.out.println(makeSingleItemQueues(students));
+
+        Queue<String> sortedStudents = mergeSort(students);
+        System.out.println(sortedStudents);
+
+    }
+
+
 }
