@@ -75,16 +75,27 @@ public class MergeSort {
         if (items.isEmpty() || items.size() == 1) {
             return items;
         }
-        Queue<Item> sortedItems = new Queue<>();
-        Queue<Queue<Item>> singleQ;
-        singleQ = makeSingleItemQueues(items);
-        sortedItems.enqueue(singleQ.peek().dequeue());
+        Queue<Queue<Item>> singleQ = makeSingleItemQueues(items);
+        /*sortedItems.enqueue(singleQ.peek().dequeue());
         singleQ.dequeue();
         for (Queue<Item> q: singleQ) {
             sortedItems = mergeSortedQueues(sortedItems, q);
+        } // This one is not O(NlogN), it's O(N^2)
+        */
+
+        Queue<Item> leftQ = new Queue<>();
+        Queue<Item> rightQ = new Queue<>();
+        int singleQsize = singleQ.size();
+        int middleIdx = singleQsize / 2;
+        for (int i = 0; i < singleQsize; i += 1) {
+            if (i < middleIdx) {
+                leftQ.enqueue(singleQ.dequeue().dequeue());
+            } else {
+                rightQ.enqueue(singleQ.dequeue().dequeue());
+            }
         }
 
-        return sortedItems;
+        return mergeSortedQueues(mergeSort(leftQ), mergeSort(rightQ));
     }
 
 
