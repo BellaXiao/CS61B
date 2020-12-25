@@ -176,7 +176,7 @@ public class RadixSort {
      */
     public static void main(String[] args) {
         //String[] array = {"2", "100", "ab", "addd", "acdbe"};
-        String[] array = {"_", "2", "2__", "_"};
+        String[] array = {"3", "112", "904", "294", "209", "820", "394", "810"};
         System.out.println("Sorted results from LSD:");
         for (String s: sort(array)) {
             System.out.println(s);
