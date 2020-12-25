@@ -174,7 +174,7 @@ public class RadixSort {
     /**
      * Test of LSD radix sort
      */
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         //String[] array = {"2", "100", "ab", "addd", "acdbe"};
         String[] array = {"3", "112", "904", "294", "209", "820", "394", "810"};
         System.out.println("Sorted results from LSD:");
@@ -186,6 +186,6 @@ public class RadixSort {
         for (String s: sortMSD(array)) {
             System.out.println(s);
         }
-    }
+    }*/
 
 }
