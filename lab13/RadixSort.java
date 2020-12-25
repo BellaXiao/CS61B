@@ -48,7 +48,7 @@ public class RadixSort {
             int c;
             for (String s: asciis) {
                 if (s.length() < d + 1) {
-                    c = '_';
+                    c = 0;
                 } else {
                     c = s.charAt(d);
                 }
@@ -63,7 +63,7 @@ public class RadixSort {
             // go through asciis and put sorted array into tempRes
             for (String s: asciis) {
                 if (s.length() < d + 1) {
-                    c = '_';
+                    c = 0;
                 } else {
                     c = s.charAt(d);
                 }
@@ -116,7 +116,7 @@ public class RadixSort {
         int c;
         for (String s: partition) {
             if (s.length() < index + 1) {
-                c = '_';
+                c = 0;
             } else {
                 c = s.charAt(index);
             }
@@ -131,7 +131,7 @@ public class RadixSort {
         // go through partition and put sorted array into tempRes
         for (String s: partition) {
             if (s.length() < index + 1) {
-                c = '_';
+                c = 0;
             } else {
                 c = s.charAt(index);
             }
