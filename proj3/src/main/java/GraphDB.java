@@ -109,6 +109,7 @@ public class GraphDB {
     // Self: Create a map mapping original name to node id
     // built in clean() method
     private HashMap<String, HashSet<Long>> nameToIDMap = new HashMap<>();
+    private HashMap<String, HashSet<Node>> nameToNodeMap = new HashMap<>();
 
 
 
@@ -167,15 +168,15 @@ public class GraphDB {
     private void clean() {
         // TD: Your code here.
         // Self: loop the map, if any Node has empty edgeList, then delete it from map
-        // Self: maybe a helper function to removeNode().
         ArrayList<Long> cleanID = new ArrayList<>();
         for (long id: nodesMap.keySet()) {
             if (nodesMap.get(id).edgeList.isEmpty()) {
                 cleanID.add(id);
             }
         }
-        // try add all nodes name, including those being cleaned later
-        for (long id: vertices()) {
+        // try adding all nodes name into trie, cleanedNameMap and nameToNodeMap
+        // including those being cleaned later
+        /*for (long id: vertices()) {
             String originalName = getNode(id).getName();
             if (originalName == null) {
                 continue;
@@ -195,11 +196,35 @@ public class GraphDB {
             }
             originalNames.add(originalName);
             cleanedNameMap.put(cleanedName, originalNames);
+        }*/
+        for (long id: vertices()) {
+            Node curNode = getNode(id);
+            String originalName = curNode.getName();
+            if (originalName == null) {
+                continue;
+            }
+            HashSet<Node> nodeSet = new HashSet<>();
+            if (nameToNodeMap.containsKey(originalName)) {
+                nodeSet = nameToNodeMap.get(originalName);
+            }
+            nodeSet.add(curNode);
+            nameToNodeMap.put(originalName, nodeSet);
+
+            String cleanedName = cleanString(originalName);
+            locationNamesTrie.insert(cleanedName);
+            ArrayList<String> originalNames = new ArrayList<>();
+            if (cleanedNameMap.containsKey(cleanedName)) {
+                originalNames = cleanedNameMap.get(cleanedName);
+            }
+            originalNames.add(originalName);
+            cleanedNameMap.put(cleanedName, originalNames);
         }
         /* try not remove those unconnected nodes for golden points
+        *  but this will making router not working.
+        */
         for (long id: cleanID) {
             nodesMap.remove(id);
-        }*/
+        }
         // considering building the trie and cleanedNameMap after nodes are cleaned up
         // by this we make sure the names of those nodes being cleaned up
         // are not added into trie or map below
@@ -454,7 +479,7 @@ public class GraphDB {
         for (String name: cleanedNameMap.get(cleanString(locationName))) {
             uniqueOriginalName.add(name);
         }
-        for (String name: uniqueOriginalName) {
+        /*for (String name: uniqueOriginalName) {
             for (long id : nameToIDMap.get(name)) {
                 Map<String, Object> nodeMap = new HashMap<>();
                 GraphDB.Node node = getNode(id);
@@ -464,8 +489,18 @@ public class GraphDB {
                 nodeMap.put("id", node.getID());
                 resList.add(nodeMap);
             }
-        }
+        }*/
         //System.out.println(resList);
+        for (String name: uniqueOriginalName) {
+            for (Node node : nameToNodeMap.get(name)) {
+                Map<String, Object> nodeMap = new HashMap<>();
+                nodeMap.put("lat", node.getLat());
+                nodeMap.put("lon", node.getLon());
+                nodeMap.put("name", node.getName());
+                nodeMap.put("id", node.getID());
+                resList.add(nodeMap);
+            }
+        }
         return resList;
     }
 
