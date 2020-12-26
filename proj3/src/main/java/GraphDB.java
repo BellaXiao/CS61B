@@ -69,7 +69,7 @@ public class GraphDB {
             return this.lon;
         }
 
-        public double getID() {
+        public long getID() {
             return this.id;
         }
     }
