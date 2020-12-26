@@ -159,7 +159,7 @@ public class Router {
                 NavigationDirection nd = new NavigationDirection();
                 nd.distance = curDistance;
                 nd.direction = curDirection;
-                if (curName != null) {
+                if (curName != null && curName != "") {
                     nd.way = curName;
                 } else {
                     nd.way = NavigationDirection.UNKNOWN_ROAD;

@@ -6,9 +6,7 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 
 /**
@@ -57,6 +55,23 @@ public class GraphDB {
         public void setName(String name) {
             this.name = name;
         }
+
+        public String getName() {
+            return this.name;
+        }
+
+        // Used for getLocations in MapServer
+        public double getLat() {
+            return this.lat;
+        }
+
+        public double getLon() {
+            return this.lon;
+        }
+
+        public double getID() {
+            return this.id;
+        }
     }
 
     // Self: create helper class Edge (node1, node2, distance, name)
@@ -73,6 +88,9 @@ public class GraphDB {
 
         public void setName(String name) {
             this.name = name;
+            // considering also insert this name into the StringTrie
+            // but what if the node is cleaned later for no connection in the graph?
+            // try building trie in the clean() method
         }
 
         public String getName() {
@@ -80,9 +98,14 @@ public class GraphDB {
         }
     }
 
-    // Self: create a instance map: key = node id, value = Node
+    // Self: create an instance map: key = node id, value = Node
     private HashMap<Long, Node> nodesMap = new HashMap<>();
-
+    // Self: Create an instance StringTire to store all the name Strings of nodes in map.
+    // built in clean() method
+    private StringTrie locationNamesTrie = new StringTrie();
+    // Self: Create a map mapping cleaned name to original Name
+    // built in clean() method
+    private HashMap<String, String> cleanedNameMap = new HashMap<>();
 
 
 
@@ -140,7 +163,7 @@ public class GraphDB {
      *  we can reasonably assume this since typically roads are connected.
      */
     private void clean() {
-        // TODO: Your code here.
+        // TD: Your code here.
         // Self: loop the map, if any Node has empty edgeList, then delete it from map
         // Self: maybe a helper function to removeNode().
         ArrayList<Long> cleanID = new ArrayList<>();
@@ -152,8 +175,30 @@ public class GraphDB {
         for (long id: cleanID) {
             nodesMap.remove(id);
         }
+        // considering building the trie and cleanedNameMap after nodes are cleaned up
+        // by this we make sure the names of those nodes being cleaned up
+        // are not added into trie or map below
+        // can be used later for getLocations and get getLocationsByPrefix
+        for (long id: vertices()) {
+            String originalName = getNode(id).getName();
+            if (originalName == null) {
+                continue;
+            }
+            String cleanedName = cleanString(originalName);
+            locationNamesTrie.insert(cleanedName);
+            cleanedNameMap.put(cleanedName, originalName);
+        }
     }
 
+    /**
+     * Self: creates get attibutes method related to trie and map
+     */
+    public StringTrie getLocationNamesTrie() {
+        return locationNamesTrie;
+    }
+    public Map<String, String> getCleanedNameMap() {
+        return cleanedNameMap;
+    }
 
 
     /**
@@ -280,4 +325,117 @@ public class GraphDB {
         return nodesMap.get(v).lat;
 
     }
+
+
+
+
+
+    /**
+     * create a self trie class to help with getLocationsByPrefix method in MapServer
+     */
+    public static class StringTrie {
+        private class Node {
+            boolean isLeaf;
+            Map<Character, Node> children;
+
+            Node() {
+                isLeaf = false;
+                children = new HashMap<>();
+            }
+        }
+
+        private Node root;
+        StringTrie() {
+            root = new Node();
+        }
+
+        public void insert(String key) {
+            Node cur = root;
+            for (char c: key.toCharArray()) {
+                if (!cur.children.containsKey(c)) {
+                    cur.children.put(c, new Node());
+                }
+
+                cur = cur.children.get(c);
+            }
+            cur.isLeaf = true;
+        }
+
+        public List<String> keysWithPrefix(String prefix) {
+            List<String> resList = new ArrayList<>();
+            String cache = prefix;
+            Node cur = root;
+            for (char c: prefix.toCharArray()) {
+                if (!cur.children.containsKey(c)) {
+                    return null;
+                }
+                cur = cur.children.get(c);
+            }
+            // need a helper function to do it recursively
+            getKeys(cache, cur, resList);
+
+            return resList;
+        }
+
+        private void getKeys(String cache, Node cur, List<String> resList) {
+            if (cur.isLeaf) {
+                resList.add(cache);
+            }
+
+            for (char c: cur.children.keySet()) {
+                Node n = cur.children.get(c);
+                getKeys(cache + c, n, resList);
+            }
+        }
+    }
+
+    /**
+     * In order to make runtime of getLocationsByPrefix and getLocations in MapServer to be O(k)
+     * Need to build the Trie and the nameMap in the GraphDB class clean() method first
+     */
+    public List<String> getLocationsByPrefix(String prefix) {
+        ArrayList<String> resList = new ArrayList();
+        List<String> resCleaned = locationNamesTrie.keysWithPrefix(cleanString(prefix));
+        if (resCleaned != null) {
+            for (String cleanedName: resCleaned) {
+                resList.add(cleanedNameMap.get(cleanedName));
+            }
+        }
+        return resList;
+    }
+
+
+
+
+    /**
+     * Helper function for getLocations method which is also used in MapServer
+     * given original Name of the id, generate all Nodes id having that original Name
+     */
+    public List<Long> getIDfromName(String name) {
+        List<Long> resIDList = new ArrayList<>();
+        for (long id: vertices()) {
+            if (getNode(id).getName() == name) {
+                resIDList.add(id);
+            }
+        }
+        return resIDList;
+    }
+
+    public List<Map<String, Object>> getLocations(String locationName) {
+        List<Map<String, Object>> resList = new ArrayList<>();
+        for (String name: getLocationsByPrefix(locationName)) {
+            for (long id: getIDfromName(name)) {
+                Map<String, Object> nodeMap = new HashMap<>();
+                GraphDB.Node node = getNode(id);
+                nodeMap.put("lat", node.getLat());
+                nodeMap.put("lon", node.getLon());
+                nodeMap.put("name", node.getName());
+                nodeMap.put("id", node.getID());
+                resList.add(nodeMap);
+            }
+        }
+        return resList;
+    }
+
+
 }

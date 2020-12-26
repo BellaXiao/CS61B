@@ -49,6 +49,13 @@ public class TestGraphBuilding {
         assertEquals("Your graph should have 25176 nodes after cleaning. Consider removing the call"
                 + " to clean and seeing if you get 399287 nodes as expected as a sanity check on"
                 + "  your results before calling clean.", 25176, numberOfNodes);
+        for (long id: ids) {
+            String name = graph.getNode(id).getName();
+            if (name != null) {
+                System.out.format("%d: %s\n", id, name);
+            }
+
+        }
     }
 
     /**
