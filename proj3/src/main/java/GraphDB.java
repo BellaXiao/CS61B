@@ -108,7 +108,7 @@ public class GraphDB {
     private HashMap<String, ArrayList<String>> cleanedNameMap = new HashMap<>();
     // Self: Create a map mapping original name to node id
     // built in clean() method
-    private HashMap<String, Long> nameToIDMap = new HashMap<>();
+    private HashMap<String, HashSet<Long>> nameToIDMap = new HashMap<>();
 
 
 
@@ -180,7 +180,12 @@ public class GraphDB {
             if (originalName == null) {
                 continue;
             }
-            nameToIDMap.put(originalName, id);
+            HashSet<Long> idSet = new HashSet<>();
+            if (nameToIDMap.containsKey(originalName)) {
+                idSet = nameToIDMap.get(originalName);
+            }
+            idSet.add(id);
+            nameToIDMap.put(originalName, idSet);
 
             String cleanedName = cleanString(originalName);
             locationNamesTrie.insert(cleanedName);
@@ -445,16 +450,22 @@ public class GraphDB {
 
     public List<Map<String, Object>> getLocations(String locationName) {
         List<Map<String, Object>> resList = new ArrayList<>();
-        for (String name: getLocationsByPrefix(locationName)) {
-            long id = nameToIDMap.get(name);
-            Map<String, Object> nodeMap = new HashMap<>();
-            GraphDB.Node node = getNode(id);
-            nodeMap.put("lat", node.getLat());
-            nodeMap.put("lon", node.getLon());
-            nodeMap.put("name", node.getName());
-            nodeMap.put("id", node.getID());
-            resList.add(nodeMap);
+        HashSet<String> uniqueOriginalName = new HashSet<>();
+        for (String name: cleanedNameMap.get(cleanString(locationName))) {
+            uniqueOriginalName.add(name);
         }
+        for (String name: uniqueOriginalName) {
+            for (long id : nameToIDMap.get(name)) {
+                Map<String, Object> nodeMap = new HashMap<>();
+                GraphDB.Node node = getNode(id);
+                nodeMap.put("lat", node.getLat());
+                nodeMap.put("lon", node.getLon());
+                nodeMap.put("name", node.getName());
+                nodeMap.put("id", node.getID());
+                resList.add(nodeMap);
+            }
+        }
+        //System.out.println(resList);
         return resList;
     }
 
