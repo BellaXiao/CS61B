@@ -105,8 +105,10 @@ public class GraphDB {
     private StringTrie locationNamesTrie = new StringTrie();
     // Self: Create a map mapping cleaned name to original Name
     // built in clean() method
-    private HashMap<String, String> cleanedNameMap = new HashMap<>();
-
+    private HashMap<String, ArrayList<String>> cleanedNameMap = new HashMap<>();
+    // Self: Create a map mapping original name to node id
+    // built in clean() method
+    private HashMap<String, Long> nameToIDMap = new HashMap<>();
 
 
 
@@ -178,9 +180,16 @@ public class GraphDB {
             if (originalName == null) {
                 continue;
             }
+            nameToIDMap.put(originalName, id);
+
             String cleanedName = cleanString(originalName);
             locationNamesTrie.insert(cleanedName);
-            cleanedNameMap.put(cleanedName, originalName);
+            ArrayList<String> originalNames = new ArrayList<>();
+            if (cleanedNameMap.containsKey(cleanedName)) {
+                originalNames = cleanedNameMap.get(cleanedName);
+            }
+            originalNames.add(originalName);
+            cleanedNameMap.put(cleanedName, originalNames);
         }
         /* try not remove those unconnected nodes for golden points
         for (long id: cleanID) {
@@ -207,7 +216,7 @@ public class GraphDB {
     public StringTrie getLocationNamesTrie() {
         return locationNamesTrie;
     }
-    public Map<String, String> getCleanedNameMap() {
+    public Map<String, ArrayList<String>> getCleanedNameMap() {
         return cleanedNameMap;
     }
 
@@ -409,7 +418,9 @@ public class GraphDB {
         List<String> resCleaned = locationNamesTrie.keysWithPrefix(cleanString(prefix));
         if (resCleaned != null) {
             for (String cleanedName: resCleaned) {
-                resList.add(cleanedNameMap.get(cleanedName));
+                for (String originalName: cleanedNameMap.get(cleanedName)) {
+                    resList.add(originalName);
+                }
             }
         }
         return resList;
@@ -418,11 +429,11 @@ public class GraphDB {
 
 
 
-    /**
+    /** No need
      * Helper function for getLocations method which is also used in MapServer
      * given original Name of the id, generate all Nodes id having that original Name
      */
-    public List<Long> getIDfromName(String name) {
+    /*public List<Long> getIDfromName(String name) {
         List<Long> resIDList = new ArrayList<>();
         for (long id: vertices()) {
             if (getNode(id).getName() == name) {
@@ -430,20 +441,19 @@ public class GraphDB {
             }
         }
         return resIDList;
-    }
+    }*/
 
     public List<Map<String, Object>> getLocations(String locationName) {
         List<Map<String, Object>> resList = new ArrayList<>();
         for (String name: getLocationsByPrefix(locationName)) {
-            for (long id: getIDfromName(name)) {
-                Map<String, Object> nodeMap = new HashMap<>();
-                GraphDB.Node node = getNode(id);
-                nodeMap.put("lat", node.getLat());
-                nodeMap.put("lon", node.getLon());
-                nodeMap.put("name", node.getName());
-                nodeMap.put("id", node.getID());
-                resList.add(nodeMap);
-            }
+            long id = nameToIDMap.get(name);
+            Map<String, Object> nodeMap = new HashMap<>();
+            GraphDB.Node node = getNode(id);
+            nodeMap.put("lat", node.getLat());
+            nodeMap.put("lon", node.getLon());
+            nodeMap.put("name", node.getName());
+            nodeMap.put("id", node.getID());
+            resList.add(nodeMap);
         }
         return resList;
     }
