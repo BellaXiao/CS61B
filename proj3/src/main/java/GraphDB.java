@@ -88,9 +88,6 @@ public class GraphDB {
 
         public void setName(String name) {
             this.name = name;
-            // considering also insert this name into the StringTrie
-            // but what if the node is cleaned later for no connection in the graph?
-            // try building trie in the clean() method
         }
 
         public String getName() {
@@ -106,9 +103,9 @@ public class GraphDB {
     // Self: Create a map mapping cleaned name to original Name
     // built in clean() method
     private HashMap<String, ArrayList<String>> cleanedNameMap = new HashMap<>();
-    // Self: Create a map mapping original name to node id
+    // Self: Create a map mapping original name to node.
     // built in clean() method
-    private HashMap<String, HashSet<Long>> nameToIDMap = new HashMap<>();
+    //private HashMap<String, HashSet<Long>> nameToIDMap = new HashMap<>();
     private HashMap<String, HashSet<Node>> nameToNodeMap = new HashMap<>();
 
 
@@ -176,27 +173,6 @@ public class GraphDB {
         }
         // try adding all nodes name into trie, cleanedNameMap and nameToNodeMap
         // including those being cleaned later
-        /*for (long id: vertices()) {
-            String originalName = getNode(id).getName();
-            if (originalName == null) {
-                continue;
-            }
-            HashSet<Long> idSet = new HashSet<>();
-            if (nameToIDMap.containsKey(originalName)) {
-                idSet = nameToIDMap.get(originalName);
-            }
-            idSet.add(id);
-            nameToIDMap.put(originalName, idSet);
-
-            String cleanedName = cleanString(originalName);
-            locationNamesTrie.insert(cleanedName);
-            ArrayList<String> originalNames = new ArrayList<>();
-            if (cleanedNameMap.containsKey(cleanedName)) {
-                originalNames = cleanedNameMap.get(cleanedName);
-            }
-            originalNames.add(originalName);
-            cleanedNameMap.put(cleanedName, originalNames);
-        }*/
         for (long id: vertices()) {
             Node curNode = getNode(id);
             String originalName = curNode.getName();
@@ -225,19 +201,6 @@ public class GraphDB {
         for (long id: cleanID) {
             nodesMap.remove(id);
         }
-        // considering building the trie and cleanedNameMap after nodes are cleaned up
-        // by this we make sure the names of those nodes being cleaned up
-        // are not added into trie or map below
-        // can be used later for getLocations and get getLocationsByPrefix
-        /*for (long id: vertices()) {
-            String originalName = getNode(id).getName();
-            if (originalName == null) {
-                continue;
-            }
-            String cleanedName = cleanString(originalName);
-            locationNamesTrie.insert(cleanedName);
-            cleanedNameMap.put(cleanedName, originalName);
-        }*/
     }
 
     /**
@@ -479,18 +442,7 @@ public class GraphDB {
         for (String name: cleanedNameMap.get(cleanString(locationName))) {
             uniqueOriginalName.add(name);
         }
-        /*for (String name: uniqueOriginalName) {
-            for (long id : nameToIDMap.get(name)) {
-                Map<String, Object> nodeMap = new HashMap<>();
-                GraphDB.Node node = getNode(id);
-                nodeMap.put("lat", node.getLat());
-                nodeMap.put("lon", node.getLon());
-                nodeMap.put("name", node.getName());
-                nodeMap.put("id", node.getID());
-                resList.add(nodeMap);
-            }
-        }*/
-        //System.out.println(resList);
+
         for (String name: uniqueOriginalName) {
             for (Node node : nameToNodeMap.get(name)) {
                 Map<String, Object> nodeMap = new HashMap<>();
