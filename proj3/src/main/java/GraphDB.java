@@ -172,13 +172,7 @@ public class GraphDB {
                 cleanID.add(id);
             }
         }
-        for (long id: cleanID) {
-            nodesMap.remove(id);
-        }
-        // considering building the trie and cleanedNameMap after nodes are cleaned up
-        // by this we make sure the names of those nodes being cleaned up
-        // are not added into trie or map below
-        // can be used later for getLocations and get getLocationsByPrefix
+        // try add all nodes name, including those being cleaned later
         for (long id: vertices()) {
             String originalName = getNode(id).getName();
             if (originalName == null) {
@@ -188,6 +182,23 @@ public class GraphDB {
             locationNamesTrie.insert(cleanedName);
             cleanedNameMap.put(cleanedName, originalName);
         }
+        /* try not remove those unconnected nodes for golden points
+        for (long id: cleanID) {
+            nodesMap.remove(id);
+        }*/
+        // considering building the trie and cleanedNameMap after nodes are cleaned up
+        // by this we make sure the names of those nodes being cleaned up
+        // are not added into trie or map below
+        // can be used later for getLocations and get getLocationsByPrefix
+        /*for (long id: vertices()) {
+            String originalName = getNode(id).getName();
+            if (originalName == null) {
+                continue;
+            }
+            String cleanedName = cleanString(originalName);
+            locationNamesTrie.insert(cleanedName);
+            cleanedNameMap.put(cleanedName, originalName);
+        }*/
     }
 
     /**
