@@ -129,9 +129,8 @@ public class SeamCarver {
 
     // sequence of indices for horizontal seam
     public int[] findHorizontalSeam() {
-        int[] res;
         this.picture = transpose(this.picture);
-        res = findVerticalSeam();
+        int[] res = findVerticalSeam();
         this.picture = transpose(this.picture);
         return res;
     }
@@ -154,7 +153,7 @@ public class SeamCarver {
             return;
         }
         validateSeam(seam, width());
-        SeamRemover.removeHorizontalSeam(this.picture, seam);
+        this.picture = SeamRemover.removeHorizontalSeam(picture(), seam);
     }
 
 
@@ -164,7 +163,7 @@ public class SeamCarver {
             return;
         }
         validateSeam(seam, height());
-        SeamRemover.removeVerticalSeam(this.picture, seam);
+        this.picture = SeamRemover.removeVerticalSeam(picture(), seam);
     }
 
     // Self: a validated function to throw exceptions if called with invalid x and y
