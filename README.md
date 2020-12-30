@@ -6,9 +6,6 @@ start: 2020/10/3
 
 
 ## Learning Memo
-lecture视频-reading -各种作业和项目.
-不要从reading里面点链接，有些会跳转到18年的内容。
-
 run java in sublime3 text: cmd+b (build system:java-bai)
 
 
@@ -24,25 +21,9 @@ version -- 19sp
 	reading 1.2 (10/4 done)
 	Proj 0 （10/8 - before "Drawing the Background"）
 			（10/11 done）
-	
-
 -------------------------
 version -- change to 18sp(https://sp18.datastructur.es/)
 also tracker in Notion app.
-
-	vid 1/22 （10/14 done）
-	R2.1 (10/15 done)
-	lab2 setup
-	lab2
-	vid 1/24
-	R2.2
-	disc 2
-
-
-
-
-
-
 
 
 
@@ -52,29 +33,7 @@ proj0 apple$ java -cp ./examples: StdDrawDemo
 -- (-cp means set classpath, the default value if current directory)
 
 ## Note:
-每次修改java file 以后都要重新javac 编译得到新的class file, 才能得到新结果。
-
-## proj0 Note:
-test the main function - cmd line:
-	javac NBody.java
-	java NBody 100 1 ./data/planets.txt
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Everytime we updated java file, we need to use javac to complie again to get new class file to show the update result.
 
 
 
@@ -82,56 +41,56 @@ test the main function - cmd line:
 (https://sp18.datastructur.es/materials/guides/using-git.html) -- Amazing tutorial!!!!
 
 3 main cmd:
-	git add []
-	git commit -m "[]"
-	git push origin main
+	* git add []
+	* git commit -m "[]"
+	* git push origin main
 
 
 self:
 * for a new one, can build a repository in github websidte, then connect remote repository with local one, clone to local first (Note, you can also choose to only use a local git repository)
 
 cd to coding file:
-git clone url(clone the project in github to local) 
+* git clone url(clone the project in github to local) 
 —-(if we already have some content in remote git)
 
-git remote add origin “url under codes button”
+* git remote add origin “url under codes button”
 —-(if we don’t have remote files that don’t exist locally;
 “origin” above can be rename, and the push command below would change that ‘origin’to the new name)
 
-git remote rm origin(or other name)
+* git remote rm origin(or other name)
 --(to remove that remote connection you build before)
 
-git init (at certain path) (cd to cs61a)
+* git init (at certain path) (cd to cs61a)
 --(Note:In order to begin, you must initialize a Git repository by typing the following command into your terminal while in the directory whose history you want to store in a local repository. )
 
-git status
+* git status
 git add . (git add ./lab01)
 git status (used to check what files are added to be tracked and what are untracked)
 
-git commit -m “string”
+* git commit -m “string”
 --(Note:Your message should be descriptive and explain what changes your commit makes to your code. You may want to quickly describe bug fixes, implemented classes, etc. so that your messages are helpful later when looking through your commit log.)
 
-git push origin master 
+* git push origin master 
 --(Used for push changes to remote repository)
 --(origin can be changed to any name you rename above ) (and the default branch name master has changed to main branch starting from 2020) —> git push origin(bx) main
 
-rm -rf .git (delete a git repository locally after accidentally use git init on that file)
+* rm -rf .git (delete a git repository locally after accidentally use git init on that file)
 
-git checkout
+* git checkout
 git checkout 9f955d85359fc8e4504d7220f13fad34f8f2c62b ./recipes/tofu
 --important!!!: Make sure to specify a file (or directory) when you use checkout. 
 
 
 
 -- (Get projects and assignments skeleton from CS61B official git)
-git pull skeleton master
-git pull skeleton master --allow-unrelated-histories
+* git pull skeleton master
+* git pull skeleton master --allow-unrelated-histories
 --(skeleton is the remote repository for CS61B course official github)
-May appear below results:
-"Please enter a commit message to explain why this merge is necessary,especially if it merges an updated upstream into a topic branch."
-It's not a Git error message, it's the editor as git uses your default editor.
+* May appear below results:
+* "Please enter a commit message to explain why this merge is necessary,especially if it merges an updated upstream into a topic branch."
+* It's not a Git error message, it's the editor as git uses your default editor.
 
-To solve this:
+* To solve this:
 	press "i" (i for insert)
 	write your merge message
 	press "esc" (escape)
@@ -139,6 +98,6 @@ To solve this:
 	then press enter
 
 
-https://bitmingw.com/2018/08/19/git-submodule-tutorial/
+* https://bitmingw.com/2018/08/19/git-submodule-tutorial/
 -- git add submodule
 

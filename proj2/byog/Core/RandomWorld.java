@@ -11,31 +11,34 @@ import java.util.*;
  * Draws a world consisting of hexagonal regions.
  */
 public class RandomWorld {
-    private static final int WIDTH = 80;
-    private static final int HEIGHT = 30;
+    /* Feel free to change the width and height. */
+    public static int WIDTH = 80;
+    public static int HEIGHT = 30;
 
-    private static final long SEED = 2873123;
-    private static final Random RANDOM = new Random(SEED);
+    //public static long SEED = 2873123;
+    //public static Random RANDOM = new Random(SEED);
 
-    private static final int minWidth = 3;
-    private static final int minHeight = 3;
-    private  static  final int maxNRect = 100;
+    public static final int minWidth = 3;
+    public static final int minHeight = 3;
+    public  static  final int maxNRect = 100;
 
-    // adding a set in the class contains all the existed rects in this world.
-    private static Set <Rectangular> rectSet = new HashSet<>();
+    // adding a list in the class contains all the existed rects in this world.
+    // can'y use set, otherwise the world will be different even with same SEED, because of no order in set.
+    public static List <Rectangular> rectSet = new LinkedList<>();
+
 
     /**
      * Position Class.
      */
-    private static class Position {
-        private int x;
-        private int y;
+    public static class Position {
+        public int x;
+        public int y;
 
-        private Position() {
+        public Position() {
             x = 0;
             y = 0;
         }
-        private Position(int x_pos, int y_pos) {
+        public Position(int x_pos, int y_pos) {
             x = x_pos;
             y = y_pos;
         }
@@ -43,9 +46,9 @@ public class RandomWorld {
 
 
     /**
-     * Private func: adjust number out of range to be min or max of the range
+     * public func: adjust number out of range to be min or max of the range
      */
-    private static int adjInRange(int t, int min, int max) {
+    public static int adjInRange(int t, int min, int max) {
         if (min <= t && t <= max) {
             return t;
         } else if (t < min) {
@@ -61,7 +64,7 @@ public class RandomWorld {
      * Rectangular Class.
      * Method: Rectangular.isOverlap().
      */
-    private static class Rectangular {
+    public static class Rectangular {
         public Position leftDown = new Position();
         public int width;
         public int height;
@@ -73,7 +76,7 @@ public class RandomWorld {
         public Position rightDown = new Position();
         public Position rightUp = new Position();
 
-        private Rectangular() {
+        public Rectangular() {
             leftDown.x = 0;
             leftDown.y = 0;
             width = minWidth;
@@ -89,7 +92,7 @@ public class RandomWorld {
             rightUp.x = rightDown.x;
             rightUp.y = leftUp.y;
         }
-        private Rectangular(Position leftDown_pos, int wid, int hei, TETile t_o, TETile t_i) {
+        public Rectangular(Position leftDown_pos, int wid, int hei, TETile t_o, TETile t_i) {
             /** adjusted leftDown position and width, height into desired range for this world
              *  Meaning any rectangular generated in this world should satisfy the below constraints.
              *  The leftDown, width and height range here guarantee the rectangular is inside the world with minimum width/height as minWidth/minHeight.
@@ -118,7 +121,7 @@ public class RandomWorld {
         }
 
         // Add another Rectangular constructor, this one is rectangular used for connection, which has width or height < 3 , equal to 2.
-        private Rectangular(Position leftDown_pos, int wid, int hei, TETile t) {
+        public Rectangular(Position leftDown_pos, int wid, int hei, TETile t) {
             if (leftDown_pos != null) {
                 leftDown.x = adjInRange(leftDown_pos.x, 0, WIDTH  - 1);
                 leftDown.y = adjInRange(leftDown_pos.y, 0, HEIGHT - 1);
@@ -143,7 +146,7 @@ public class RandomWorld {
         /**
          * Rectangular class method: check whether two rects overlap with each other
          */
-        private static boolean isOverlap(Rectangular a, Rectangular b) {
+        public static boolean isOverlap(Rectangular a, Rectangular b) {
             // swap size smaller one to be a, larger one to be b
             if (a.width * a.height > b.width * b.height) {
                 Rectangular temp = a;
@@ -188,7 +191,7 @@ public class RandomWorld {
          * Rectangular class method: check whether two rects are adjacent to each other.
          * first requires two rects are non-overlap, then adjacent to each other and has common length >= 3.
          */
-        private static boolean isAdjacent(Rectangular a, Rectangular b) {
+        public static boolean isAdjacent(Rectangular a, Rectangular b) {
             if (!Rectangular.isOverlap(a, b)) {
                 //System.out.println("is not overlap.");
                 boolean con1 = (b.leftDown.x == a.rightDown.x + 1);
@@ -221,7 +224,7 @@ public class RandomWorld {
      * ToDo: connect adjacent rects
      * first need to make sure rects isAdjacent, and then replace the tile within the adjacent range.
      */
-    private static void addConnection (TETile[][] world, Rectangular existR, Rectangular r, TETile t) {
+    public static void addConnection (TETile[][] world, Rectangular existR, Rectangular r, TETile t, Random RANDOM) {
         if (!Rectangular.isAdjacent(existR, r)) {
             System.out.println("Can only add connection to adjacent rectangulars.");
             return;
@@ -254,13 +257,13 @@ public class RandomWorld {
             Position leftdown = new Position(leftX + 1, existR.leftUp.y);
             connectR = new Rectangular(leftdown, replaceWid, 2, t);
         }
-        addOneRect(world, connectR);
+        addOneRect(world, connectR, RANDOM);
 
     }
 
     /** Decide whether a rectangular overlaps with any existed rects in this world (in the rectSet)
      */
-    private static boolean isOverlapSet (Rectangular r) {
+    public static boolean isOverlapSet (Rectangular r) {
         for (Rectangular existedRect : rectSet) {
             if (Rectangular.isOverlap(r, existedRect)) {
                 return true;
@@ -272,7 +275,7 @@ public class RandomWorld {
     /** Decide whether a rectangular is adjacent to any existed rects in this world (in the rectSet)
      * if we find one, return that rectangular, if no one is found, return null.
      */
-    private static Rectangular isAdjacentSet (Rectangular r) {
+    public static Rectangular isAdjacentSet (Rectangular r) {
         for (Rectangular existedRect : rectSet) {
             if (Rectangular.isAdjacent(r, existedRect)) {
                 return existedRect;
@@ -292,7 +295,7 @@ public class RandomWorld {
      * @param rect: the rectangular to draw
      */
 
-    private static void addOneRect(TETile[][] world, Rectangular rect) {
+    public static void addOneRect(TETile[][] world, Rectangular rect, Random RANDOM) {
         // handle exceptions
         /* No need for this, since all these are handled within Rectangular constructor.
         if (rect.leftDown==null || rect.leftDown.x < 0 || rect.leftDown.y < 0 || rect.width <= 0 || rect.height <= 0) {
@@ -333,7 +336,7 @@ public class RandomWorld {
      * @param t_out: using TETile t_out as outside edge
      * @param t_in: using TETile t_in as inside
      */
-    public static void addNRect(TETile[][] world, int N, TETile t_out, TETile t_in) {
+    public static void addNRect(TETile[][] world, int N, TETile t_out, TETile t_in, Random RANDOM) {
         int count = 0;
         // if don't do this, The N could be too large that we can't have that many non-overlap rects in the whole world,
         // and goes into infinite loop. Theoretically, the max count can be WIDTH / 3 * HEIGHT / 3, but it's too slow and too much is meanless,
@@ -350,22 +353,26 @@ public class RandomWorld {
                 break;
             }
             // No need to adjust leftDown and width, height, thoes constraints are handled within Rectangular Constructor.
-            int x = RANDOM.nextInt(WIDTH);
-            int y = RANDOM.nextInt(HEIGHT);
+            int x = RANDOM.nextInt(world.length);
+            int y = RANDOM.nextInt(world[0].length);
             // adjust the range for width and height to make the generation quicker,
             // otherwise it takes too much time to have a non-overlap rect accepted.
-            int width = RANDOM.nextInt(WIDTH/5);
-            int height = RANDOM.nextInt(HEIGHT/5);
+            int width = RANDOM.nextInt(world.length/5);
+            int height = RANDOM.nextInt(world[0].length/5);
+
+            //debug purpose:
+            // System.out.format("x:%d, y: %d, width: %d, height: %d\n", x,y,width,height);
+
             Position p = new Position(x, y);
             Rectangular r = new Rectangular(p, width, height, t_out, t_in);
             // only add r that doesn't overlap with all the existed rectangulars in this world rectSet.
             if (rectSet.isEmpty()) {
-                addOneRect(world, r);
+                addOneRect(world, r, RANDOM);
                 count += 1;
             } else if (isAdjacentSet(r) != null && !isOverlapSet(r)) {
                 Rectangular existR = isAdjacentSet(r);
-                addOneRect(world, r);
-                addConnection(world, existR, r, t_in);
+                addOneRect(world, r, RANDOM);
+                addConnection(world, existR, r, t_in, RANDOM);
                 count += 1;
             }
         }
@@ -389,6 +396,9 @@ public class RandomWorld {
         return newWorld;
     }
 
+
+
+
     public static void main(String[] args) {
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
@@ -398,7 +408,7 @@ public class RandomWorld {
 
         // Test: addOneRect and addNRect (non-Overlap)
         //addOneRect(newWorld, p, 10, 5, Tileset.WALL, Tileset.FLOOR);
-        addNRect(newWorld, 100, Tileset.WALL, Tileset.FLOOR);
+        //addNRect(newWorld, 100, Tileset.WALL, Tileset.FLOOR, args[0]);
         /*// Test Rectangular datatype and isOverlap method. -- Success!
         int wid = 3;
         int hei = 3;

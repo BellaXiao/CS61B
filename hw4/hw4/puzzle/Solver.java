@@ -88,7 +88,7 @@ public class Solver {
         return resList;
     }
 
-    public int getMinPQcount () {
+    public int getMinPQcount() {
         return minPQcount;
     }
 }
