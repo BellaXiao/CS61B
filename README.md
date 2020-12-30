@@ -9,8 +9,8 @@ start: 2020/10/3
 run java in sublime3 text: cmd+b (build system:java-bai)
 
 
-##### Order & Version Change
-version -- 19sp
+## Order & Version Change
+<p>version -- 19sp
 vid1(10/3 done)/vid2（10/3 done)
 guide(10/3 done)/reading(10/3 done)
 HW0(10/4 done) 
@@ -19,8 +19,8 @@ lab1 (10/4 done)
 Disc 1 (10/4 done)
 vid 1/25 (10/4 done)
 reading 1.2 (10/4 done)
-Proj 0 （10/8 - before "Drawing the Background"）
-		（10/11 done）
+Proj 0(10/8 - before "Drawing the Background"）
+(10/11 done）</p>
 -------------------------
 version -- change to 18sp(https://sp18.datastructur.es/)
 also tracker in Notion app.
